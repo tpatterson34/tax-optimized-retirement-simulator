@@ -1,0 +1,23 @@
+- `[x]` **Project Setup**
+  - `[x]` Initialize Vite + React + TS project at `C:\Users\tpatt\.gemini\antigravity\scratch\retirement_simulator`.
+  - `[x]` Configure for GitHub Pages deployment (`vite.config.ts` base path).
+  - `[x]` Install dependencies: `tailwindcss`, `recharts`, `lucide-react`.
+  - `[x]` Configure Tailwind CSS.
+- `[x]` **State Management**
+  - `[x]` Create `src/store/simulatorStore.ts` with React Context/useReducer or Zustand.
+  - `[x]` Set empty defaults for personal fields (balances, ages).
+  - `[x]` Set base values for non-personal fields (10% growth, 3% inflation, etc.).
+- `[x]` **Core Calculation Modules**
+  - `[x]` Implement `src/engine/taxBrackets.ts` (2026 federal brackets, standard deductions, OBBBA).
+  - `[x]` Implement `src/engine/rmdCalculator.ts` (IRS Table III, SECURE 2.0 ages).
+  - `[x]` Implement `src/engine/irmaa.ts` (2026 IRMAA brackets & surcharges).
+  - `[x]` Implement `src/engine/socialSecurity.ts` (Taxation logic for SS benefits).
+  - `[x]` Implement `src/engine/simulationLoop.ts` (Annual deterministic projection loop).
+- `[x]` **User Interface**
+  - `[x]` Build `InputPanel.tsx` (Single-page form with expandable sections for easy data entry).
+  - `[x]` Add slider/inputs for target Roth Conversion amounts/brackets.
+  - `[x]` Build `Dashboard.tsx` to display summary metrics.
+  - `[x]` Build `Charts.tsx` utilizing `recharts` for portfolio value, tax burden, and income sources over time.
+- `[x]` **Integration & Verification**
+  - `[x]` Connect UI to the simulation loop and state store.
+  - `[x]` Verify mathematical accuracy of RMDs and taxes for edge cases.
