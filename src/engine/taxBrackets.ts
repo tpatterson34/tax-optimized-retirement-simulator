@@ -108,8 +108,9 @@ export function calculateOrdinaryTax(status: FilingStatus, taxableIncome: number
  */
 export function getBracketCapacity(status: FilingStatus, taxableIncome: number, targetRate: number): number {
   const brackets = BRACKETS_2026[status];
-  const targetBracket = brackets.find(b => b.rate === targetRate);
-  if (!targetBracket) return 0;
+  // Find the highest bracket that is less than or equal to the target rate
+  const targetBracket = [...brackets].reverse().find(b => b.rate <= targetRate + 0.001);
+  if (!targetBracket || targetRate === 0) return 0;
   
   return Math.max(0, targetBracket.ceiling - taxableIncome);
 }

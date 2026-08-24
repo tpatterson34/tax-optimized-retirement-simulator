@@ -221,13 +221,20 @@ export default function InputPanel({ params, setParams }: InputPanelProps) {
               <span>Target Conversion Bracket Ceiling</span>
               <span className="font-semibold text-blue-700">{(params.targetConversionBracketRate || 0) * 100}%</span>
             </label>
-            <input 
-              type="range" 
-              min="0" max="0.37" step="0.01"
-              value={params.targetConversionBracketRate || 0} 
+            <select
+              value={params.targetConversionBracketRate || 0}
               onChange={e => handleChange('targetConversionBracketRate', parseFloat(e.target.value))}
-              className="w-full"
-            />
+              className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={0}>0% (No Conversions)</option>
+              <option value={0.10}>10% Bracket</option>
+              <option value={0.12}>12% Bracket</option>
+              <option value={0.22}>22% Bracket</option>
+              <option value={0.24}>24% Bracket</option>
+              <option value={0.32}>32% Bracket</option>
+              <option value={0.35}>35% Bracket</option>
+              <option value={0.37}>37% Bracket</option>
+            </select>
             <p className="text-xs text-slate-500 mt-1">Simulates Roth conversions up to the top of this bracket.</p>
           </div>
           <div className="flex items-center space-x-2 pt-2">
