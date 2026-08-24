@@ -70,9 +70,9 @@ export default function Dashboard({ results, params }: DashboardProps) {
       </div>
 
       {/* Portfolio Value Chart */}
-      <div className="h-80 flex flex-col">
+      <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">Portfolio Value Projection</h3>
-        <div className="flex-1 min-h-0">
+        <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -89,9 +89,9 @@ export default function Dashboard({ results, params }: DashboardProps) {
       </div>
 
       {/* Tax Burden Chart */}
-      <div className="h-80 flex flex-col">
+      <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">Taxable Income & Taxes Paid</h3>
-        <div className="flex-1 min-h-0">
+        <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -108,21 +108,21 @@ export default function Dashboard({ results, params }: DashboardProps) {
       </div>
       
       {/* Conversion & RMDs */}
-      <div className="h-80 flex flex-col">
+      <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">RMDs and Roth Conversions</h3>
-        <div className="flex-1 min-h-0">
+        <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="ageA" />
-            <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
-            <Tooltip formatter={(val: any) => formatter.format(val)} />
-            <Legend />
-            <Bar dataKey="rmd" fill="#facc15" name="Required Minimum Distribution (RMD)" />
-            <Bar dataKey="rothConversion" fill="#4ade80" name="Roth Conversion Amount" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="ageA" />
+              <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
+              <Tooltip formatter={(val: any) => formatter.format(val)} />
+              <Legend />
+              <Bar dataKey="rmd" fill="#facc15" name="Required Minimum Distribution (RMD)" />
+              <Bar dataKey="rothConversion" fill="#4ade80" name="Roth Conversion Amount" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
