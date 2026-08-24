@@ -1,7 +1,7 @@
-
+import { useState, useEffect, useRef } from 'react';
 import type { SimulationYearResult } from '../engine/simulationLoop';
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   BarChart, Bar, Legend, ComposedChart, Line
 } from 'recharts';
 
@@ -13,6 +13,21 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ results, params }: DashboardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartWidth, setChartWidth] = useState(800);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setChartWidth(containerRef.current.clientWidth);
+      }
+    };
+    // small delay to ensure DOM is ready
+    setTimeout(handleResize, 50);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (!results || results.length === 0) return <div>No simulation results available. Check inputs.</div>;
 
   const data = results.map(r => ({
@@ -40,7 +55,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
   const terminalReal = terminalNominal / Math.pow(1 + params.inflationRate, terminalYear - params.startYear);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" ref={containerRef}>
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-slate-50 p-4 border border-slate-200 rounded-lg">
@@ -73,8 +88,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
       <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">Portfolio Value Projection</h3>
         <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+            <AreaChart width={chartWidth} height={288} data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="ageA" label={{ value: 'Age (Spouse A)', position: 'insideBottomRight', offset: -5 }} />
               <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
@@ -84,7 +98,6 @@ export default function Dashboard({ results, params }: DashboardProps) {
               <Area type="monotone" dataKey="taxDeferred" stackId="1" stroke="#eab308" fill="#fde047" name="Tax-Deferred" />
               <Area type="monotone" dataKey="taxFree" stackId="1" stroke="#22c55e" fill="#86efac" name="Tax-Free (Roth)" />
             </AreaChart>
-          </ResponsiveContainer>
         </div>
       </div>
 
@@ -92,8 +105,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
       <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">Taxable Income & Taxes Paid</h3>
         <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+            <ComposedChart width={chartWidth} height={288} data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="ageA" />
               <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
@@ -103,7 +115,6 @@ export default function Dashboard({ results, params }: DashboardProps) {
               <Line type="monotone" dataKey="federalTax" stroke="#ef4444" strokeWidth={2} name="Federal Tax" />
               <Line type="monotone" dataKey="irmaaPenalty" stroke="#f97316" strokeWidth={2} name="IRMAA Penalty" />
             </ComposedChart>
-          </ResponsiveContainer>
         </div>
       </div>
       
@@ -111,8 +122,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
       <div className="mb-8">
         <h3 className="font-semibold text-slate-700 mb-2">RMDs and Roth Conversions</h3>
         <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+            <BarChart width={chartWidth} height={288} data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="ageA" />
               <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
@@ -121,7 +131,6 @@ export default function Dashboard({ results, params }: DashboardProps) {
               <Bar dataKey="rmd" fill="#facc15" name="Required Minimum Distribution (RMD)" />
               <Bar dataKey="rothConversion" fill="#4ade80" name="Roth Conversion Amount" />
             </BarChart>
-          </ResponsiveContainer>
         </div>
       </div>
     </div>
