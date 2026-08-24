@@ -52,6 +52,7 @@ export interface SimulationYearResult {
   cashFlowNeeded: number;
   rmdAmount: number;
   rothConversionAmount: number;
+  actualRothDeposit: number;
   
   taxableIncome: number;
   federalTaxPaid: number;
@@ -206,7 +207,10 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
     // Apply Growth (Deterministic)
     endingBalances.taxDeferred *= (1 + params.assumedGrowthRate);
     endingBalances.taxFree *= (1 + params.assumedGrowthRate);
-    endingBalances.taxable *= (1 + params.assumedGrowthRate);
+    
+    // Taxable accounts suffer tax drag (e.g., 15% dividend/capital gains tax on the growth)
+    const taxableGrowthRate = params.assumedGrowthRate * (1 - 0.15);
+    endingBalances.taxable *= (1 + taxableGrowthRate);
     
     // Apply Inflation to Expenses
     currentExpenses *= (1 + params.inflationRate);
@@ -220,6 +224,7 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
       cashFlowNeeded: cashFlowDeficit,
       rmdAmount,
       rothConversionAmount,
+      actualRothDeposit,
       taxableIncome,
       federalTaxPaid,
       irmaaPenalty,

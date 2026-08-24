@@ -41,7 +41,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
     federalTax: r.federalTaxPaid,
     irmaaPenalty: r.irmaaPenalty,
     rmd: r.rmdAmount,
-    rothConversion: r.rothConversionAmount
+    rothConversion: r.actualRothDeposit
   }));
 
   const formatter = new Intl.NumberFormat('en-US', {
