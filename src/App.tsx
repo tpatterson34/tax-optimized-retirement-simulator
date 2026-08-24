@@ -16,7 +16,7 @@ function App() {
 
       <main className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Inputs */}
-        <section className="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-fit">
+        <section className="lg:col-span-4 min-w-0 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-fit">
           <div className="bg-slate-100 px-4 py-3 border-b border-slate-200">
             <h2 className="font-semibold text-slate-700 flex items-center space-x-2">
               <span>Financial Profile</span>
@@ -28,7 +28,7 @@ function App() {
         </section>
 
         {/* Right Column: Dashboard/Charts */}
-        <section className="lg:col-span-8 flex flex-col space-y-6">
+        <section className="lg:col-span-8 min-w-0 flex flex-col space-y-6">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
             <h2 className="font-semibold text-slate-700 flex items-center space-x-2 mb-4">
               <LineChart className="w-5 h-5 text-blue-600" />

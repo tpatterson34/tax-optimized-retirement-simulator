@@ -70,44 +70,49 @@ export default function Dashboard({ results, params }: DashboardProps) {
       </div>
 
       {/* Portfolio Value Chart */}
-      <div className="h-80">
+      <div className="h-80 flex flex-col">
         <h3 className="font-semibold text-slate-700 mb-2">Portfolio Value Projection</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="ageA" label={{ value: 'Age (Spouse A)', position: 'insideBottomRight', offset: -5 }} />
-            <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
-            <Tooltip formatter={(val: any) => formatter.format(val)} labelFormatter={(label) => `Age: ${label}`} />
-            <Legend />
-            <Area type="monotone" dataKey="taxable" stackId="1" stroke="#94a3b8" fill="#cbd5e1" name="Taxable" />
-            <Area type="monotone" dataKey="taxDeferred" stackId="1" stroke="#eab308" fill="#fde047" name="Tax-Deferred" />
-            <Area type="monotone" dataKey="taxFree" stackId="1" stroke="#22c55e" fill="#86efac" name="Tax-Free (Roth)" />
-          </AreaChart>
-        </ResponsiveContainer>
+        <div className="flex-1 min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="ageA" label={{ value: 'Age (Spouse A)', position: 'insideBottomRight', offset: -5 }} />
+              <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
+              <Tooltip formatter={(val: any) => formatter.format(val)} labelFormatter={(label) => `Age: ${label}`} />
+              <Legend />
+              <Area type="monotone" dataKey="taxable" stackId="1" stroke="#94a3b8" fill="#cbd5e1" name="Taxable" />
+              <Area type="monotone" dataKey="taxDeferred" stackId="1" stroke="#eab308" fill="#fde047" name="Tax-Deferred" />
+              <Area type="monotone" dataKey="taxFree" stackId="1" stroke="#22c55e" fill="#86efac" name="Tax-Free (Roth)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Tax Burden Chart */}
-      <div className="h-80">
+      <div className="h-80 flex flex-col">
         <h3 className="font-semibold text-slate-700 mb-2">Taxable Income & Taxes Paid</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="ageA" />
-            <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
-            <Tooltip formatter={(val: any) => formatter.format(val)} />
-            <Legend />
-            <Bar dataKey="taxableIncome" fill="#bfdbfe" name="Taxable Income" />
-            <Line type="monotone" dataKey="federalTax" stroke="#ef4444" strokeWidth={2} name="Federal Tax" />
-            <Line type="monotone" dataKey="irmaaPenalty" stroke="#f97316" strokeWidth={2} name="IRMAA Penalty" />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="flex-1 min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="ageA" />
+              <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
+              <Tooltip formatter={(val: any) => formatter.format(val)} />
+              <Legend />
+              <Bar dataKey="taxableIncome" fill="#bfdbfe" name="Taxable Income" />
+              <Line type="monotone" dataKey="federalTax" stroke="#ef4444" strokeWidth={2} name="Federal Tax" />
+              <Line type="monotone" dataKey="irmaaPenalty" stroke="#f97316" strokeWidth={2} name="IRMAA Penalty" />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
       </div>
       
       {/* Conversion & RMDs */}
-      <div className="h-80">
+      <div className="h-80 flex flex-col">
         <h3 className="font-semibold text-slate-700 mb-2">RMDs and Roth Conversions</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+        <div className="flex-1 min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="ageA" />
             <YAxis tickFormatter={(val) => `$${(val/1000).toFixed(0)}k`} />
