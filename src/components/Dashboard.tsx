@@ -5,11 +5,14 @@ import {
   BarChart, Bar, Legend, ComposedChart, Line
 } from 'recharts';
 
+import type { SimulationParams } from '../engine/simulationLoop';
+
 interface DashboardProps {
   results: SimulationYearResult[];
+  params: SimulationParams;
 }
 
-export default function Dashboard({ results }: DashboardProps) {
+export default function Dashboard({ results, params }: DashboardProps) {
   if (!results || results.length === 0) return <div>No simulation results available. Check inputs.</div>;
 
   const data = results.map(r => ({
@@ -32,14 +35,24 @@ export default function Dashboard({ results }: DashboardProps) {
     maximumFractionDigits: 0
   });
 
+  const terminalYear = data[data.length - 1].year;
+  const terminalNominal = data[data.length - 1].totalBalance;
+  const terminalReal = terminalNominal / Math.pow(1 + params.inflationRate, terminalYear - params.startYear);
+
   return (
     <div className="space-y-8">
       {/* Metrics Row */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-slate-50 p-4 border border-slate-200 rounded-lg">
           <p className="text-slate-500 text-sm mb-1">Terminal Value (Nominal)</p>
           <p className="text-2xl font-bold text-slate-800">
-            {formatter.format(data[data.length - 1].totalBalance)}
+            {formatter.format(terminalNominal)}
+          </p>
+        </div>
+        <div className="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+          <p className="text-slate-500 text-sm mb-1">Terminal Value (Today's $)</p>
+          <p className="text-2xl font-bold text-green-700">
+            {formatter.format(terminalReal)}
           </p>
         </div>
         <div className="bg-slate-50 p-4 border border-slate-200 rounded-lg">

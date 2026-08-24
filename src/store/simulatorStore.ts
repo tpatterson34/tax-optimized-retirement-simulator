@@ -6,12 +6,11 @@ const STORAGE_KEY = 'retirementSimulatorParams';
 
 const DEFAULT_PARAMS: SimulationParams = {
   startYear: new Date().getFullYear(),
-  yearsToProject: 30,
   assumedGrowthRate: 0.10,
   inflationRate: 0.03,
   status: 'MFJ',
-  spouseA: { birthYear: 1960, retirementYear: 2026, socialSecurityStartYear: 2027, socialSecurityAnnualBenefit: 0 },
-  spouseB: { birthYear: 1960, retirementYear: 2026, socialSecurityStartYear: 2027, socialSecurityAnnualBenefit: 0 },
+  spouseA: { birthYear: 1960, lifeExpectancy: 95, retirementYear: 2026, socialSecurityStartYear: 2027, socialSecurityAnnualBenefit: 0 },
+  spouseB: { birthYear: 1960, lifeExpectancy: 95, retirementYear: 2026, socialSecurityStartYear: 2027, socialSecurityAnnualBenefit: 0 },
   accounts: { taxDeferred: 0, taxFree: 0, taxable: 0 },
   annualExpenses: 0,
   earnedIncome: 0,

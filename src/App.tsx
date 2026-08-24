@@ -34,7 +34,7 @@ function App() {
               <LineChart className="w-5 h-5 text-blue-600" />
               <span>Simulation Dashboard</span>
             </h2>
-            <Dashboard results={results} />
+            <Dashboard results={results} params={params} />
           </div>
         </section>
       </main>

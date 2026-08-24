@@ -6,7 +6,6 @@ import { calculateTaxableSocialSecurity } from './socialSecurity';
 
 export interface SimulationParams {
   startYear: number;
-  yearsToProject: number;
   assumedGrowthRate: number; // e.g., 0.10
   inflationRate: number; // e.g., 0.03
   
@@ -14,12 +13,14 @@ export interface SimulationParams {
   
   spouseA: {
     birthYear: number;
+    lifeExpectancy: number;
     retirementYear: number;
     socialSecurityStartYear: number;
     socialSecurityAnnualBenefit: number;
   };
   spouseB?: {
     birthYear: number;
+    lifeExpectancy: number;
     retirementYear: number;
     socialSecurityStartYear: number;
     socialSecurityAnnualBenefit: number;
@@ -70,8 +71,11 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
   
   // To track 2-year lookback for IRMAA, we'll store MAGI history. For simplicity, assume starting MAGI is $100k
   const magiHistory: number[] = [100000, 100000];
+  const yearsA = Math.max(0, params.spouseA.lifeExpectancy - (params.startYear - params.spouseA.birthYear));
+  const yearsB = params.spouseB ? Math.max(0, params.spouseB.lifeExpectancy - (params.startYear - params.spouseB.birthYear)) : 0;
+  const yearsToProject = Math.max(yearsA, yearsB);
 
-  for (let i = 0; i < params.yearsToProject; i++) {
+  for (let i = 0; i <= yearsToProject; i++) {
     const year = params.startYear + i;
     const ageA = year - params.spouseA.birthYear;
     const ageB = params.spouseB ? year - params.spouseB.birthYear : undefined;

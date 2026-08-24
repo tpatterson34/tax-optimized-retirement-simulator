@@ -147,6 +147,15 @@ export default function InputPanel({ params, setParams }: InputPanelProps) {
               className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
             />
           </div>
+          <div>
+            <label className="block text-slate-600 mb-1">Life Expectancy (Age)</label>
+            <input 
+              type="number" 
+              value={params.spouseA.lifeExpectancy || ''} 
+              onChange={e => handleNestedChange('spouseA', 'lifeExpectancy', parseFloat(e.target.value) || 95)}
+              className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
+            />
+          </div>
         </div>
       </div>
       
@@ -187,6 +196,15 @@ export default function InputPanel({ params, setParams }: InputPanelProps) {
                 type="number" 
                 value={params.spouseB.socialSecurityAnnualBenefit || ''} 
                 onChange={e => handleNestedChange('spouseB', 'socialSecurityAnnualBenefit', parseFloat(e.target.value) || 0)}
+                className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
+              />
+            </div>
+            <div>
+              <label className="block text-slate-600 mb-1">Life Expectancy (Age)</label>
+              <input 
+                type="number" 
+                value={params.spouseB.lifeExpectancy || ''} 
+                onChange={e => handleNestedChange('spouseB', 'lifeExpectancy', parseFloat(e.target.value) || 95)}
                 className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
               />
             </div>
