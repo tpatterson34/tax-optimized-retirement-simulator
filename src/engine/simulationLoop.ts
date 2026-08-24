@@ -38,6 +38,7 @@ export interface SimulationParams {
   // Roth Conversion Strategy
   targetConversionBracketRate?: number; // e.g., 0.24 (24% bracket)
   avoidIrmaaCliffs: boolean;
+  payConversionTaxFromConversion: boolean;
 }
 
 export interface SimulationYearResult {
@@ -139,6 +140,12 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
     }
     
     // 5. Calculate Final Taxes
+    const baselineMagi = nonSsMagi;
+    const baselineTaxableSs = calculateTaxableSocialSecurity(ssIncome, baselineMagi, params.status);
+    const baselineGross = baselineMagi + baselineTaxableSs;
+    const baselineTaxable = Math.max(0, baselineGross - calculateStandardDeduction(params.status, baselineGross, spousesOver65));
+    const baselineFederalTax = calculateOrdinaryTax(params.status, baselineTaxable);
+
     nonSsMagi += rothConversionAmount;
     taxableSs = calculateTaxableSocialSecurity(ssIncome, nonSsMagi, params.status);
     grossIncome = nonSsMagi + taxableSs;
@@ -148,13 +155,20 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
     taxableIncome = Math.max(0, grossIncome - standardDeduction);
     
     const federalTaxPaid = calculateOrdinaryTax(params.status, taxableIncome);
+    const conversionTax = Math.max(0, federalTaxPaid - baselineFederalTax);
     
     // IRMAA Penalty (Based on 2 years prior)
     const irmaaMagi = magiHistory[magiHistory.length - 3];
     const enrolledSpouses = spousesOver65; // Simplify: enrolled if >= 65
     const irmaaPenalty = enrolledSpouses > 0 ? calculateIrmaaPenalty(irmaaMagi, params.status, enrolledSpouses) : 0;
     
-    const totalTaxAndPenalty = federalTaxPaid + irmaaPenalty;
+    let totalTaxAndPenalty = federalTaxPaid + irmaaPenalty;
+    let actualRothDeposit = rothConversionAmount;
+
+    if (params.payConversionTaxFromConversion && rothConversionAmount > 0) {
+      actualRothDeposit = Math.max(0, rothConversionAmount - conversionTax);
+      totalTaxAndPenalty -= conversionTax; // The tax was already paid out of the gross conversion
+    }
     
     // 6. Sequence of Returns / Withdrawals
     // We need to fund: remainingDeficit + totalTaxAndPenalty
@@ -185,7 +199,7 @@ export function runSimulation(params: SimulationParams): SimulationYearResult[] 
     // 7. Persist & Advance
     const endingBalances = {
       taxDeferred: currentBalances.taxDeferred - rmdAmount - rothConversionAmount - fromTaxDeferred,
-      taxFree: currentBalances.taxFree + rothConversionAmount - fromTaxFree,
+      taxFree: currentBalances.taxFree + actualRothDeposit - fromTaxFree,
       taxable: currentBalances.taxable - fromTaxable + Math.max(0, rmdAmount - cashFlowDeficit) // Reinvest unused RMD
     };
     

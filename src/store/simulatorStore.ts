@@ -16,6 +16,7 @@ const DEFAULT_PARAMS: SimulationParams = {
   earnedIncome: 0,
   targetConversionBracketRate: 0.24,
   avoidIrmaaCliffs: true,
+  payConversionTaxFromConversion: true,
 };
 
 export function useSimulatorStore() {

@@ -246,6 +246,15 @@ export default function InputPanel({ params, setParams }: InputPanelProps) {
             />
             <label className="text-slate-600">Strictly Avoid IRMAA Cliffs during Conversions</label>
           </div>
+          <div className="flex items-center space-x-2 pt-2">
+            <input 
+              type="checkbox" 
+              checked={params.payConversionTaxFromConversion}
+              onChange={e => handleChange('payConversionTaxFromConversion', e.target.checked)}
+              className="rounded text-blue-600"
+            />
+            <label className="text-slate-600">Withhold Taxes from Converted Amount</label>
+          </div>
         </div>
       </div>
     </div>
