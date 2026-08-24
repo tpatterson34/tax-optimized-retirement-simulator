@@ -6,6 +6,37 @@ interface InputPanelProps {
   setParams: React.Dispatch<React.SetStateAction<SimulationParams>>;
 }
 
+function PercentageInput({ label, value, onChange }: { label: string, value: number, onChange: (v: number) => void }) {
+  const [localVal, setLocalVal] = React.useState((value * 100).toString());
+  
+  // Sync if external state changes, but allow free typing otherwise
+  React.useEffect(() => {
+    if (parseFloat(localVal) / 100 !== value) {
+      setLocalVal((value * 100).toString());
+    }
+  }, [value]);
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalVal(e.target.value);
+    const parsed = parseFloat(e.target.value);
+    if (!isNaN(parsed)) {
+      onChange(parsed / 100);
+    }
+  };
+
+  return (
+    <div>
+      <label className="block text-slate-600 mb-1">{label}</label>
+      <input 
+        type="text" 
+        value={localVal} 
+        onChange={handleInput}
+        className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
+      />
+    </div>
+  );
+}
+
 export default function InputPanel({ params, setParams }: InputPanelProps) {
   const handleChange = (field: string, value: any) => {
     setParams(prev => ({ ...prev, [field]: value }));
@@ -27,24 +58,16 @@ export default function InputPanel({ params, setParams }: InputPanelProps) {
       <div>
         <h3 className="font-semibold text-blue-800 border-b pb-1 mb-3">Global Assumptions</h3>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-600 mb-1">Growth Rate (%)</label>
-            <input 
-              type="number" step="0.1" 
-              value={(params.assumedGrowthRate * 100).toFixed(1)} 
-              onChange={e => handleChange('assumedGrowthRate', parseFloat(e.target.value) / 100)}
-              className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
-            />
-          </div>
-          <div>
-            <label className="block text-slate-600 mb-1">Inflation Rate (%)</label>
-            <input 
-              type="number" step="0.1" 
-              value={(params.inflationRate * 100).toFixed(1)} 
-              onChange={e => handleChange('inflationRate', parseFloat(e.target.value) / 100)}
-              className="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500" 
-            />
-          </div>
+          <PercentageInput 
+            label="Growth Rate (%)" 
+            value={params.assumedGrowthRate} 
+            onChange={v => handleChange('assumedGrowthRate', v)} 
+          />
+          <PercentageInput 
+            label="Inflation Rate (%)" 
+            value={params.inflationRate} 
+            onChange={v => handleChange('inflationRate', v)} 
+          />
         </div>
       </div>
 
