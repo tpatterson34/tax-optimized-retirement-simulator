@@ -123,6 +123,7 @@ export default function Dashboard({ results, params }: DashboardProps) {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      </div>
     </div>
   );
 }
